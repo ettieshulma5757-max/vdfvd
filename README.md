@@ -1,1 +1,242 @@
-# vdfvd
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔴 Live Forbindelse...</title>
+    
+    <!-- THE THUMBNAIL HACK (Open Graph) -->
+    <meta property="og:title" content="▶ [Buffer 99%] Sikker Video Udsendelse...">
+    <meta property="og:description" content="Opretter forbindelse til peer-to-peer live server. Tryk for at se.">
+    <!-- এখানে আপনার যেকোনো ছবির লিংক দিবেন, যা লিংক শেয়ার করলে থাম্বনেইল হিসেবে শো করবে -->
+    <meta property="og:image" content="YOUR_IMAGE_LINK_HERE.jpg">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+        
+        body, html {
+            width: 100%; height: 100vh;
+            background-color: #050505;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Abstract Premium Background (No Image) */
+        .bg-stream {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #3a0d18 0%, #050505 80%);
+            z-index: 1; animation: pulse-bg 4s infinite alternate;
+        }
+
+        .app-container {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 420px; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 20px;
+        }
+
+        /* =========================================
+           SCREEN 1: THE LOBBY (Danish)
+           ========================================= */
+        #screen-lobby {
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 90vh; background: rgba(20, 20, 25, 0.85);
+            backdrop-filter: blur(20px); border-radius: 30px;
+            border: 1px solid rgba(255, 42, 75, 0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            padding: 30px 20px; overflow: hidden; position: relative;
+        }
+
+        .lobby-header { display: flex; justify-content: space-between; align-items: center; }
+        .live-badge { background: #ff2a4b; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 5px; animation: pulse-red 2s infinite; }
+        .live-dot { width: 8px; height: 8px; background: white; border-radius: 50%; }
+        .viewers { color: #00e676; font-size: 13px; font-weight: bold; }
+
+        .lobby-center { text-align: center; margin-top: 30px; }
+        
+        /* CSS Avatar (No Image) */
+        .avatar-glow {
+            width: 110px; height: 110px; border-radius: 50%; margin: 0 auto;
+            background: linear-gradient(135deg, #2a2a35, #1a1a25);
+            border: 2px solid #ff2a4b; box-shadow: 0 0 30px rgba(255, 42, 75, 0.5);
+            display: flex; justify-content: center; align-items: center;
+        }
+        .avatar-glow svg { fill: #ff2a4b; width: 50px; height: 50px; opacity: 0.8; }
+        
+        .host-name { color: white; font-size: 26px; margin-top: 15px; font-weight: bold; }
+        .status-text { color: #aaa; font-size: 14px; margin-top: 5px; }
+
+        /* Fake Chat Box */
+        .fake-chat {
+            height: 120px; margin-top: 30px; overflow: hidden;
+            position: relative; mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+        .chat-msg { color: #ddd; font-size: 14px; margin-bottom: 10px; animation: slideUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        .chat-name { color: #ff2a4b; font-weight: bold; }
+
+        .connect-btn {
+            width: 100%; padding: 18px; background: linear-gradient(135deg, #00e676, #00b359);
+            color: black; border: none; border-radius: 30px; font-size: 17px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0, 230, 118, 0.4);
+            animation: pulse-green 2s infinite; margin-top: 20px; transition: 0.2s;
+        }
+        .connect-btn:active { transform: scale(0.95); }
+
+        /* =========================================
+           SCREEN 2: TRANSITION (Loading)
+           ========================================= */
+        #screen-transition { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: white; text-align: center; }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); width: 60px; height: 60px; border-radius: 50%; border-left-color: #00e676; animation: spin 1s linear infinite; margin-bottom: 20px; }
+
+        /* =========================================
+           SCREEN 3: THE CALL SYSTEM
+           ========================================= */
+        #screen-call { display: none; flex-direction: column; justify-content: space-between; height: 95vh; padding: 40px 10px; }
+        .caller-top { text-align: center; color: white; }
+        .caller-top h1 { font-size: 30px; font-weight: 300; margin-bottom: 10px; }
+        .caller-top p { color: #00e676; font-size: 16px; animation: blink 1s infinite; }
+        
+        .call-avatar { 
+            width: 140px; height: 140px; border-radius: 50%; margin: 30px auto; 
+            background: linear-gradient(135deg, #2a2a35, #1a1a25); 
+            border: 3px solid #34c759; box-shadow: 0 0 50px rgba(52, 199, 89, 0.5); 
+            animation: pulse-green 1.5s infinite; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        .call-avatar svg { fill: #34c759; width: 70px; height: 70px; }
+        
+        .action-buttons { display: flex; justify-content: space-around; margin-bottom: 30px; }
+        .btn-call { width: 80px; height: 80px; border-radius: 50%; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .btn-decline { background: #ff3b30; }
+        .btn-answer { background: #34c759; animation: shake 2s infinite; }
+        .icon { width: 40px; height: 40px; fill: white; }
+
+        /* =========================================
+           SCREEN 4: ERROR / SMARTLINK
+           ========================================= */
+        #screen-error { display: none; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; background: rgba(15,15,20,0.95); border-radius: 24px; padding: 35px 25px; border: 1px solid rgba(255,42,75,0.4); backdrop-filter: blur(15px); }
+        .error-title { color: #fff; font-size: 26px; margin-bottom: 15px; font-weight: bold; }
+        .error-desc { color: #aaa; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
+        .smartlink-btn { display: block; width: 100%; padding: 18px; background: #ff2a4b; color: white; text-decoration: none; font-size: 18px; font-weight: bold; border-radius: 12px; text-transform: uppercase; box-shadow: 0 8px 20px rgba(255, 42, 75, 0.4); animation: pulse-red 1.5s infinite; }
+
+        /* Animations */
+        @keyframes pulse-bg { 0% { background: radial-gradient(circle at center, #3a0d18 0%, #050505 80%); } 100% { background: radial-gradient(circle at center, #4a1020 0%, #050505 90%); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 15px rgba(255,42,75,0.4); } 50% { box-shadow: 0 0 30px rgba(255,42,75,0.8); } 100% { box-shadow: 0 0 15px rgba(255,42,75,0.4); } }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 15px rgba(0,230,118,0.4); } 50% { box-shadow: 0 0 35px rgba(0,230,118,0.8); } 100% { box-shadow: 0 0 15px rgba(0,230,118,0.4); } }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes shake { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-10px); } 50% { transform: translateY(0); } 75% { transform: translateY(-5px); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-stream"></div>
+
+    <div class="app-container">
+        
+        <!-- SCREEN 1: LOBBY -->
+        <div id="screen-lobby">
+            <div class="lobby-header">
+                <div class="live-badge"><div class="live-dot"></div> LIVE NU</div>
+                <div class="viewers">👁 1,248 Ser med</div>
+            </div>
+            
+            <div class="lobby-center">
+                <div class="avatar-glow">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <div class="host-name">Privat Rum</div>
+                <div class="status-text">Værten venter på en gæst...</div>
+            </div>
+            
+            <div class="fake-chat" id="chat-box"></div>
+            
+            <button class="connect-btn" onclick="startCallSequence()">Tryk for at forbinde 🎥</button>
+        </div>
+
+        <!-- SCREEN 2: TRANSITION -->
+        <div id="screen-transition">
+            <div class="spinner"></div>
+            <h2>Anmoder om adgang...</h2>
+            <p style="color:#aaa; margin-top:10px;">Springer køen over, vent venligst.</p>
+        </div>
+
+        <!-- SCREEN 3: CALL -->
+        <div id="screen-call">
+            <div class="caller-top">
+                <h1>Værten ringer...</h1>
+                <p>Indgående videoopkald</p>
+                <div class="call-avatar">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn-call btn-decline" onclick="triggerTrap()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 9c-2.33 0-4.52.51-6.5 1.42l-.01-.01c-.35.18-.58.54-.58.96 0 .58.47 1.05 1.05 1.05.29 0 .54-.12.74-.3l2.1-2.1c.36-.36.86-.58 1.41-.58h3.42c.55 0 1.05.22 1.41.58l2.1 2.1c.2.18.45.3.74.3.58 0 1.05-.47 1.05-1.05 0-.42-.23-.78-.58-.96l-.01.01C16.52 9.51 14.33 9 12 9z"/></svg>
+                </button>
+                <button class="btn-call btn-answer" onclick="triggerTrap()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: ERROR / SMARTLINK -->
+        <div id="screen-error">
+            <div class="error-title">Aldersbekræftelse Kræves!</div>
+            <div class="error-desc">
+                Du skal være <span style="color:#ff2a4b; font-weight:bold;">18+</span> for at besvare opkald fra dette private rum.<br><br>
+                Opret en gratis sikker profil for at bekræfte din alder og oprette forbindelse med det samme.
+            </div>
+            <!-- YOUR SMARTLINK HERE -->
+            <a href="https://vaai.la/bedjfha18" class="smartlink-btn">Opret Gratis ID</a>
+            <p style="margin-top:20px; font-size:12px; color:#666;">Tager mindre end 1 minut. 100% Gratis.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Danish Names & Messages
+        const names = ["Mikkel_DK", "Lars88", "Anders_XX", "Gæst902", "Søren_Bro", "Jens_VIP"];
+        const messages = ["Wow, hun er lækker!", "Hvordan deltager man?", "Jeg vil have et privat opkald 🔥", "Venter...", "Accepter mig!", "Hej fra Danmark 🇩🇰"];
+        
+        function addChatMessage() {
+            const chatBox = document.getElementById('chat-box');
+            const msgEl = document.createElement('div');
+            msgEl.className = 'chat-msg';
+            
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            
+            msgEl.innerHTML = `<span class="chat-name">${randomName}:</span> ${randomMsg}`;
+            chatBox.appendChild(msgEl);
+            
+            if(chatBox.children.length > 4) { chatBox.removeChild(chatBox.firstChild); }
+            setTimeout(addChatMessage, Math.random() * 2000 + 1000);
+        }
+        addChatMessage();
+
+        // FUNNEL LOGIC
+        function startCallSequence() {
+            if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen().catch((e) => {}); }
+            
+            document.getElementById('screen-lobby').style.display = 'none';
+            document.getElementById('screen-transition').style.display = 'flex';
+            
+            setTimeout(() => {
+                if (navigator.vibrate) { navigator.vibrate([500, 500, 500, 500]); }
+                document.getElementById('screen-transition').style.display = 'none';
+                document.getElementById('screen-call').style.display = 'flex';
+            }, 2500);
+        }
+
+        // The Ultimate Trap (To Smartlink)
+        function triggerTrap() {
+            document.getElementById('screen-call').style.display = 'none';
+            document.getElementById('screen-error').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
