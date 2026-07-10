@@ -3,272 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔴 Privat Videochat - Danmark</title>
+    <title>🔴 Live Privat Show - Danmark</title>
     
-    <meta property="og:title" content="▶ [Live] Sikker Video Udsendelse...">
-    <meta property="og:description" content="Opretter forbindelse til live server. Tryk for at se.">
+    <meta property="og:title" content="▶ [Live] Skjult Video Udsendelse...">
+    <meta property="og:description" content="Tryk for at se den private udsendelse.">
     <meta property="og:image" content="https://i.imgur.com/O6Lg1gP.jpg">
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
-        
-        body, html { width: 100%; height: 100vh; background-color: #050505; overflow: hidden; color: white; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; user-select: none; }
+        body, html { width: 100%; height: 100vh; background-color: #000; overflow: hidden; color: white; }
 
-        /* Trick 10: Blurry Background */
+        /* The Background (Insert your realistic image URL here) */
         .bg-image {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-            filter: blur(8px) brightness(0.6); transform: scale(1.1); z-index: 1;
+            filter: blur(12px) brightness(0.4); transform: scale(1.1); z-index: 1; transition: filter 0.5s;
         }
         
-        /* Trick 24: High-contrast gradient */
-        .bg-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at top right, rgba(255,153,0,0.1), transparent 50%),
-                        linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 60%, #000 100%);
-            z-index: 2;
-        }
+        .app-container { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; }
 
-        .app-container { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
-
-        /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); }
-        .logo { font-size: 20px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        /* Top Header */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .logo { font-size: 20px; font-weight: 800; text-transform: uppercase; }
         .logo span { color: #ff9900; }
-        /* Trick 8: Trust Badge */
-        .trust-badge { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 15px; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
+        .rec-badge { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff3b30; color: #ff3b30; padding: 4px 10px; border-radius: 15px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .rec-dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
 
-        /* Trick 22: FOMO Popups (Toast) */
-        .toast { position: absolute; top: 70px; left: 20px; background: rgba(0,0,0,0.7); border-left: 3px solid #00e676; padding: 8px 15px; border-radius: 5px; font-size: 12px; opacity: 0; transition: 0.5s; backdrop-filter: blur(5px); }
+        /* Device Tag */
+        .device-tag { text-align: center; font-size: 11px; color: #00e676; margin-top: 5px; opacity: 0.8; }
 
-        /* Main Content */
-        .main-content { padding: 0 25px; margin-bottom: 20px; text-align: left; }
+        /* Main Center Tap to Unblur */
+        .center-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+        .unblur-btn { background: rgba(255, 153, 0, 0.1); border: 2px solid #ff9900; backdrop-filter: blur(10px); padding: 15px 30px; border-radius: 40px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(255, 153, 0, 0.4); animation: pulse-orange 2s infinite; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+        .unblur-btn svg { width: 24px; height: 24px; fill: #ff9900; }
         
-        /* Trick 12 & 13: Location & Distance */
-        .geo-tag { color: #ff9900; font-size: 14px; font-weight: bold; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .geo-tag::before { content: '📍'; font-size: 16px; }
-        
-        .main-title { font-size: 46px; font-weight: 900; line-height: 1.1; margin-bottom: 15px; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
-        
-        /* Trick 13: Star Ratings */
-        .rating { color: #ffcc00; font-size: 14px; margin-bottom: 25px; display: flex; align-items: center; gap: 5px; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); }
-        .rating span { color: white; font-size: 12px; margin-left: 5px; }
+        .recent-views { margin-top: 15px; font-size: 13px; color: #aaa; background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 10px; }
 
-        /* Trick 5: Pulsing CTA matching the image */
-        .orange-cta {
-            background: #ff8c00;
-            border-radius: 50px; padding: 5px 25px 5px 5px; display: inline-flex; align-items: center;
-            cursor: pointer; box-shadow: 0 10px 30px rgba(255, 140, 0, 0.5);
-            animation: pulse-orange 2s infinite; width: 100%; max-width: 340px; border: 2px solid #ffa500;
-        }
-        /* Trick 4: Overlapping Avatars */
-        .avatar-group { display: flex; align-items: center; background: rgba(0,0,0,0.4); border-radius: 40px; padding: 3px 12px 3px 5px; }
-        .cam-icon { width: 32px; height: 32px; background: #222; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 8px; }
-        .cam-icon svg { fill: white; width: 16px; height: 16px; animation: blink 1.5s infinite; }
-        .avatar-group img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #ff8c00; margin-left: -12px; object-fit: cover; }
-        .avatar-group img:first-child { margin-left: 0; }
-        .cta-text { color: #000; font-size: 18px; font-weight: 800; margin-left: 15px; }
-
-        /* Trick 7: No Credit Card Text */
-        .no-cc { font-size: 12px; color: #aaa; margin-top: 15px; text-align: center; max-width: 340px; }
-
-        /* Trick 9: Fake Live Chat Box */
-        .live-chat { margin-top: 30px; height: 100px; overflow: hidden; position: relative; mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent); }
-        .chat-msg { font-size: 13px; margin-bottom: 8px; animation: slideUp 0.4s ease-out forwards; opacity: 0; transform: translateY(15px); }
+        /* Chat Area */
+        .chat-container { height: 140px; padding: 0 20px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; mask-image: linear-gradient(to bottom, transparent, black 30%); -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%); }
+        .chat-msg { font-size: 14px; margin-bottom: 8px; animation: slideUp 0.3s ease-out; text-shadow: 1px 1px 2px #000; }
         .chat-name { color: #ff9900; font-weight: bold; }
+        .system-msg { color: #ff3b30; font-weight: bold; font-size: 13px; margin-bottom: 8px; animation: slideUp 0.3s ease-out; }
+        .typing-indicator { font-size: 12px; color: #00e676; font-style: italic; margin-bottom: 15px; height: 15px; }
 
-        /* Trick 2: Urgency Timer */
-        .timer-box { position: absolute; bottom: 80px; left: 0; width: 100%; text-align: center; }
-        .timer-text { font-size: 13px; color: #ff4444; font-weight: bold; background: rgba(255,0,0,0.1); display: inline-block; padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(255,0,0,0.3); }
+        /* Bottom Status */
+        .bottom-bar { background: rgba(0, 0, 0, 0.8); padding: 12px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
+        .status-line { display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; font-weight: bold; }
+        .green-dot { width: 10px; height: 10px; background: #00e676; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #00e676; }
 
-        /* Trick 3: Live Viewer Count Bar */
-        .bottom-bar { background: rgba(10, 10, 12, 0.95); padding: 15px; text-align: center; border-top: 1px solid #333; position: relative; z-index: 10; }
-        .status-line { display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-        .green-dot { width: 10px; height: 10px; background: #00e676; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 12px #00e676; animation: blink 1s infinite; }
-        .footer-links { color: #666; font-size: 11px; }
-
-        /* =========================================
-           SCREENS (Transition, Call, Error)
-           ========================================= */
-        .fullscreen-overlay { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; background: rgba(0,0,0,0.95); position: absolute; top:0; left:0; z-index: 50; text-align: center; padding: 20px; backdrop-filter: blur(10px); }
+        /* ================= SCREENS (Overlays) ================= */
+        .overlay-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.98); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; }
         
-        .spinner { border: 4px solid rgba(255,255,255,0.1); width: 65px; height: 65px; border-radius: 50%; border-left-color: #ff9900; animation: spin 1s linear infinite; margin-bottom: 20px; }
-        
-        /* Call UI */
-        .caller-title { font-size: 28px; font-weight: 300; margin-bottom: 5px; }
-        .caller-status { color: #00e676; font-size: 15px; animation: blink 1s infinite; }
-        .call-avatar { width: 150px; height: 150px; border-radius: 50%; margin: 40px auto; background: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80') center/cover; border: 3px solid #34c759; box-shadow: 0 0 60px rgba(52, 199, 89, 0.5); animation: pulse-green 1.2s infinite; }
-        .action-buttons { display: flex; justify-content: space-around; width: 100%; max-width: 300px; margin-top: 30px; }
-        .btn-call { width: 75px; height: 75px; border-radius: 50%; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; }
-        .btn-decline { background: #ff3b30; }
-        .btn-answer { background: #34c759; animation: shake 1.5s infinite; }
-        .icon { width: 35px; height: 35px; fill: white; }
+        /* Funnel Questions */
+        .question-title { font-size: 28px; font-weight: 800; margin-bottom: 30px; color: #fff; line-height: 1.3; }
+        .btn-group { display: flex; gap: 15px; width: 100%; max-width: 350px; }
+        .btn-answer { flex: 1; padding: 15px; font-size: 20px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; text-transform: uppercase; }
+        .btn-yes { background: #34c759; color: white; box-shadow: 0 5px 15px rgba(52, 199, 89, 0.4); }
+        .btn-no { background: transparent; color: #aaa; border: 2px solid #555; }
 
-        /* Error/Trap UI */
-        .error-title { color: #fff; font-size: 30px; margin-bottom: 15px; font-weight: 900; color: #ff3b30; }
-        .error-desc { color: #ddd; font-size: 16px; margin-bottom: 35px; line-height: 1.5; }
-        /* Trick 25: Final Redirect Link */
-        .smartlink-btn { display: block; width: 100%; max-width: 350px; padding: 18px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; font-size: 18px; font-weight: bold; border-radius: 30px; box-shadow: 0 8px 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 1.5s infinite; text-transform: uppercase; }
+        /* Progress Bar Screen */
+        .progress-container { width: 100%; max-width: 300px; height: 15px; background: #222; border-radius: 10px; overflow: hidden; margin: 20px 0; border: 1px solid #444; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff9900, #ff5500); transition: width 0.1s linear; }
+        .progress-text { font-size: 18px; font-weight: bold; color: #ff9900; margin-top: 10px; }
+
+        /* Final Smartlink Screen */
+        .alert-icon { font-size: 50px; margin-bottom: 10px; }
+        .final-title { color: #ff3b30; font-size: 26px; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; }
+        .final-desc { color: #ccc; font-size: 16px; margin-bottom: 30px; line-height: 1.6; }
+        .smartlink-btn { display: block; width: 100%; max-width: 350px; padding: 20px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; font-size: 20px; font-weight: 900; border-radius: 40px; box-shadow: 0 10px 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 1.5s infinite; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Animations */
-        @keyframes pulse-orange { 0% { box-shadow: 0 0 15px rgba(255,140,0,0.4); } 50% { box-shadow: 0 0 35px rgba(255,140,0,0.8); } 100% { box-shadow: 0 0 15px rgba(255,140,0,0.4); } }
-        @keyframes pulse-green { 0% { box-shadow: 0 0 20px rgba(52,199,89,0.5); } 50% { box-shadow: 0 0 50px rgba(52,199,89,0.9); } 100% { box-shadow: 0 0 20px rgba(52,199,89,0.5); } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes shake { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-8px); } 50% { transform: translateY(0); } 75% { transform: translateY(-4px); } }
-        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-orange { 0% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 25px rgba(255,153,0,0.7); } 100% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="bg-image"></div>
-    <div class="bg-overlay"></div>
+    <div class="bg-image" id="main-bg"></div>
 
-    <div class="app-container">
+    <div class="app-container" id="screen-lobby">
+        <div class="top-bar">
+            <div class="logo">LIVE<span>JASMIN</span></div>
+            <div class="rec-badge"><div class="rec-dot"></div> REC</div>
+        </div>
         
-        <!-- MAIN LOBBY -->
-        <div id="screen-lobby" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-            
-            <div class="top-bar">
-                <div class="logo">LIVE<span>JASMIN</span></div>
-                <div class="trust-badge">🔒 100% Sikker</div>
-            </div>
+        <div class="device-tag">✔️ System: Din enhed understøtter HD-video</div>
 
-            <!-- Toast Popup Notification -->
-            <div class="toast" id="toast-msg">Jens_DK er lige tilmeldt sig...</div>
-            
-            <div class="main-content" style="margin-top: auto;">
-                
-                <div class="geo-tag">Danmark piger (2 km væk)</div>
-                <div class="main-title">Nyd Rigtige<br>Kvinder</div>
-                
-                <div class="rating">
-                    ⭐⭐⭐⭐⭐ <span>(4.9/5 - Verificerede profiler)</span>
-                </div>
-                
-                <!-- CTA Button exactly like image_fd77e1.png -->
-                <div class="orange-cta" onclick="startCallSequence()">
-                    <div class="avatar-group">
-                        <div class="cam-icon"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
-                        <img src="https://i.pravatar.cc/100?img=1" alt="u1">
-                        <img src="https://i.pravatar.cc/100?img=5" alt="u2">
-                        <img src="https://i.pravatar.cc/100?img=9" alt="u3">
-                        <img src="https://i.pravatar.cc/100?img=12" alt="u4">
-                    </div>
-                    <div class="cta-text">Start videochatten</div>
-                </div>
-
-                <div class="no-cc">Ingen betalingskort kræves til registrering. Gratis i dag!</div>
-
-                <!-- Live Chat Overlay -->
-                <div class="live-chat" id="chat-box"></div>
-            </div>
-
-            <div class="timer-box">
-                <div class="timer-text">Din VIP-invitation udløber om: <span id="countdown">04:59</span></div>
-            </div>
-
-            <div class="bottom-bar">
-                <div class="status-line">
-                    <div class="green-dot"></div>
-                    186.229 er online og onanerer lige nu
-                </div>
-                <div class="footer-links">Vilkår og Betingelser | Privatlivspolitik</div>
-            </div>
+        <div class="center-content">
+            <button class="unblur-btn" onclick="startFunnel(1)">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                Tryk for at se video
+            </button>
+            <div class="recent-views">🔥 47 har set denne profil for nylig</div>
         </div>
 
-        <!-- TRANSITION SCREEN -->
-        <div id="screen-transition" class="fullscreen-overlay">
-            <div class="spinner"></div>
-            <h2 style="font-size: 24px;">Opretter forbindelse...</h2>
-            <p style="color:#aaa; margin-top:10px;">Springer køen over. Sikker kryptering aktiveret.</p>
-        </div>
+        <div class="chat-container" id="chat-box"></div>
+        <div class="typing-indicator" id="typing">Værten skriver...</div>
 
-        <!-- CALL SCREEN -->
-        <div id="screen-call" class="fullscreen-overlay">
-            <div class="caller-title">Værten ringer...</div>
-            <div class="caller-status">Indgående videoopkald (Danmark)</div>
-            <div class="call-avatar"></div>
-            
-            <div class="action-buttons">
-                <button class="btn-call btn-decline" onclick="triggerTrap()">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 9c-2.33 0-4.52.51-6.5 1.42l-.01-.01c-.35.18-.58.54-.58.96 0 .58.47 1.05 1.05 1.05.29 0 .54-.12.74-.3l2.1-2.1c.36-.36.86-.58 1.41-.58h3.42c.55 0 1.05.22 1.41.58l2.1 2.1c.2.18.45.3.74.3.58 0 1.05-.47 1.05-1.05 0-.42-.23-.78-.58-.96l-.01.01C16.52 9.51 14.33 9 12 9z"/></svg>
-                </button>
-                <button class="btn-call btn-answer" onclick="triggerTrap()">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                </button>
+        <div class="bottom-bar">
+            <div class="status-line">
+                <div class="green-dot"></div>
+                <span id="view-count">186.229</span> er online lige nu
             </div>
-            <p style="margin-top:20px; color:#aaa; font-size: 12px;">Dette opkald er end-to-end krypteret.</p>
         </div>
+    </div>
 
-        <!-- ERROR / SMARTLINK SCREEN -->
-        <div id="screen-error" class="fullscreen-overlay" style="padding: 30px;">
-            <div class="error-title">ADVARSEL: 18+ KRÆVES</div>
-            <div class="error-desc">
-                For at besvare private opkald skal vi bekræfte, at du er over 18 år. Lovkrav i Danmark.<br><br>
-                Klik nedenfor for at oprette din <span style="color:#ff9900; font-weight:bold;">Gratis Sikkerhedsprofil</span> og gå direkte ind i videoopkaldet.
-            </div>
-            <!-- YOUR CPA OFFER LINK -->
-            <a href="https://santuy.me/milfyconnect18" class="smartlink-btn">BEKRÆFT MIN ALDER (GRATIS)</a>
-            <p style="margin-top:20px; font-size:12px; color:#666;">Ingen skjulte gebyrer. 100% Diskret.</p>
+    <!-- FUNNEL STEP 1: AGE GATE -->
+    <div class="overlay-screen" id="funnel-1">
+        <div class="question-title">Er du over 18 år gammel?</div>
+        <div class="btn-group">
+            <button class="btn-answer btn-no" onclick="startFunnel(2)">NEJ</button>
+            <button class="btn-answer btn-yes" onclick="startFunnel(2)">JA</button>
         </div>
+        <p style="color:#666; font-size:12px; margin-top:20px;">Dette indhold er kun for voksne.</p>
+    </div>
 
+    <!-- FUNNEL STEP 2: PRIVACY PROMISE -->
+    <div class="overlay-screen" id="funnel-2">
+        <div class="question-title">Lover du at holde denne piges identitet hemmelig?</div>
+        <div class="btn-group">
+            <button class="btn-answer btn-yes" style="width:100%;" onclick="startLoading()">JEG LOVER</button>
+        </div>
+    </div>
+
+    <!-- FUNNEL STEP 3: 99% PROGRESS TRAP -->
+    <div class="overlay-screen" id="funnel-loading">
+        <h2 style="color:white; margin-bottom: 10px;">Forbereder privat stream...</h2>
+        <p style="color:#aaa; font-size:14px;">Opretter sikker forbindelse</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="p-bar"></div>
+        </div>
+        <div class="progress-text"><span id="p-text">0</span>%</div>
+    </div>
+
+    <!-- FUNNEL STEP 4: FINAL SMARTLINK -->
+    <div class="overlay-screen" id="funnel-final">
+        <div class="alert-icon">⚠️</div>
+        <div class="final-title">Verifikation Påkrævet!</div>
+        <div class="final-desc">
+            Streamen er sat på pause ved 99%.<br><br>
+            Opret en <span style="color:#ff9900; font-weight:bold;">Gratis Sikkerhedsprofil</span> for at bekræfte din alder og låse videoen op med det samme.
+        </div>
+        
+        <!-- DIRECT TO YOUR OFFER LINK -->
+        <a href="https://bedjfha.hubss.one/p/uyMfR" class="smartlink-btn">OPRET GRATIS ID NU</a>
+        
+        <p style="margin-top:25px; font-size:13px; color:#888;">Tager kun 1 minut. 100% Gratis i dag.</p>
     </div>
 
     <script>
-        // 1. Fake Chat System (Trick 9)
-        const names = ["Mikkel_88", "Søren_DK", "Gæst_912", "Anders_VIP"];
-        const messages = ["Hun er fantastisk! 😍", "Accepter mig venligst...", "Er der nogen fra København her?", "Klar til sjov 🔥"];
+        // Fake Chat & System Messages
+        const names = ["Mikkel_88", "Søren_DK", "Gæst_912"];
+        const messages = ["Wow! 😍", "Er du der?", "Klar til sjov 🔥", "Vis mig mere!"];
+        const chatBox = document.getElementById('chat-box');
+        
         function addChatMessage() {
-            const chatBox = document.getElementById('chat-box');
-            const msgEl = document.createElement('div');
-            msgEl.className = 'chat-msg';
-            msgEl.innerHTML = `<span class="chat-name">${names[Math.floor(Math.random() * names.length)]}:</span> ${messages[Math.floor(Math.random() * messages.length)]}`;
-            chatBox.appendChild(msgEl);
-            if(chatBox.children.length > 3) chatBox.removeChild(chatBox.firstChild);
-            setTimeout(addChatMessage, Math.random() * 2500 + 1500);
+            if(Math.random() > 0.8) {
+                // Insert Fake System Alert randomly
+                chatBox.innerHTML += `<div class="system-msg">[System]: Privat rum lukker om 3 min. pga. høj trafik.</div>`;
+            } else {
+                const name = names[Math.floor(Math.random() * names.length)];
+                const msg = messages[Math.floor(Math.random() * messages.length)];
+                chatBox.innerHTML += `<div class="chat-msg"><span class="chat-name">${name}:</span> ${msg}</div>`;
+            }
+            if(chatBox.children.length > 4) chatBox.removeChild(chatBox.firstChild);
+            setTimeout(addChatMessage, Math.random() * 3000 + 2000);
         }
         addChatMessage();
 
-        // 2. Countdown Timer (Trick 2)
-        let time = 299;
+        // Typing Indicator Animation
         setInterval(() => {
-            let m = Math.floor(time / 60);
-            let s = time % 60;
-            document.getElementById('countdown').innerText = `0${m}:${s < 10 ? '0'+s : s}`;
-            if(time > 0) time--;
-        }, 1000);
+            const typing = document.getElementById('typing');
+            typing.style.opacity = typing.style.opacity == 1 ? 0 : 1;
+        }, 1500);
 
-        // 3. FOMO Toast Notifications (Trick 22)
-        const toastMsgs = ["Lars_DK er lige tilmeldt sig", "Nogen fra Aarhus tilsluttede sig", "VIP-rum næsten fyldt"];
+        // Dynamic Viewer Count
+        let baseCount = 186229;
         setInterval(() => {
-            const toast = document.getElementById('toast-msg');
-            toast.innerText = toastMsgs[Math.floor(Math.random() * toastMsgs.length)];
-            toast.style.opacity = 1;
-            setTimeout(() => { toast.style.opacity = 0; }, 3000);
-        }, 8000);
+            let fluctuation = Math.floor(Math.random() * 15) - 5; 
+            baseCount += fluctuation;
+            // Format number exactly like "186.229"
+            document.getElementById('view-count').innerText = baseCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }, 3500);
 
         // FUNNEL LOGIC
-        function startCallSequence() {
-            // Trick 17 & 20: Fullscreen & Vibrate
-            if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen().catch((e) => {}); }
-            if (navigator.vibrate) { navigator.vibrate(100); }
+        function startFunnel(step) {
+            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(e=>{});
+            if (navigator.vibrate) navigator.vibrate(50);
             
             document.getElementById('screen-lobby').style.display = 'none';
-            document.getElementById('screen-transition').style.display = 'flex';
+            document.getElementById('funnel-1').style.display = 'none';
+            document.getElementById('funnel-2').style.display = 'none';
             
-            setTimeout(() => {
-                // Trick 23: Vibrate pattern mimicking a ringing phone
-                if (navigator.vibrate) { navigator.vibrate([500, 500, 500, 500, 500, 500]); }
-                document.getElementById('screen-transition').style.display = 'none';
-                document.getElementById('screen-call').style.display = 'flex';
-            }, 2500);
+            if(step === 1) document.getElementById('funnel-1').style.display = 'flex';
+            if(step === 2) document.getElementById('funnel-2').style.display = 'flex';
         }
 
-        // Trick 24: Both Answer and Decline lead to the trap
-        function triggerTrap() {
-            document.getElementById('screen-call').style.display = 'none';
-            document.getElementById('screen-error').style.display = 'flex';
+        // 99% Loading Trap
+        function startLoading() {
+            if (navigator.vibrate) navigator.vibrate(50);
+            document.getElementById('funnel-2').style.display = 'none';
+            document.getElementById('funnel-loading').style.display = 'flex';
+            
+            let percent = 0;
+            let bar = document.getElementById('p-bar');
+            let text = document.getElementById('p-text');
+            
+            let interval = setInterval(() => {
+                // Fast load up to 80%, slow to 99%
+                let increment = percent < 80 ? Math.floor(Math.random() * 10) + 5 : Math.floor(Math.random() * 3) + 1;
+                percent += increment;
+                
+                if(percent >= 99) {
+                    percent = 99;
+                    clearInterval(interval);
+                    bar.style.width = '99%';
+                    text.innerText = '99';
+                    
+                    // Hold at 99% for a second, then show final trap
+                    setTimeout(() => {
+                        document.getElementById('funnel-loading').style.display = 'none';
+                        document.getElementById('funnel-final').style.display = 'flex';
+                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                    }, 1500);
+                } else {
+                    bar.style.width = percent + '%';
+                    text.innerText = percent;
+                }
+            }, 250);
         }
     </script>
 </body>
