@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔴 Live Privat Show - Danmark</title>
+    <title>🔴 Live Privat Show</title>
     
-    <meta property="og:title" content="▶ [Live] Skjult Video Udsendelse...">
-    <meta property="og:description" content="Tryk for at se den private udsendelse.">
+    <!-- ✅ THUMBNAIL & SOCIAL SHARE TRICKS (OG & Twitter Cards) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🔴 [Live] Skjult Video Udsendelse">
+    <meta property="og:description" content="Tryk for at se den private udsendelse. Ingen registrering kræves.">
+    <!-- আপনার থাম্বনেইল ছবির লিংক এখানে দিন: -->
     <meta property="og:image" content="https://i.imgur.com/O6Lg1gP.jpg">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="🔴 [Live] Skjult Video Udsendelse">
+    <meta name="twitter:description" content="Tryk for at se den private udsendelse.">
+    <!-- আপনার থাম্বনেইল ছবির লিংক এখানে দিন: -->
+    <meta name="twitter:image" content="https://i.imgur.com/O6Lg1gP.jpg">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; user-select: none; }
         body, html { width: 100%; height: 100vh; background-color: #000; overflow: hidden; color: white; }
 
-        /* The Background (Insert your realistic image URL here) */
+        /* The Background */
         .bg-image {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            /* আপনার ব্যাকগ্রাউন্ড ইমেজের লিংক এখানে দিন */
             background: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
             filter: blur(12px) brightness(0.4); transform: scale(1.1); z-index: 1; transition: filter 0.5s;
         }
@@ -26,56 +36,64 @@
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
         .logo { font-size: 20px; font-weight: 800; text-transform: uppercase; }
         .logo span { color: #ff9900; }
+        
+        /* Fake Audio Wave Animation */
+        .audio-wave { display: flex; align-items: flex-end; gap: 3px; height: 15px; }
+        .wave-bar { width: 3px; background-color: #00e676; animation: wave 1s infinite ease-in-out; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+
         .rec-badge { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff3b30; color: #ff3b30; padding: 4px 10px; border-radius: 15px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
         .rec-dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
 
-        /* Device Tag */
-        .device-tag { text-align: center; font-size: 11px; color: #00e676; margin-top: 5px; opacity: 0.8; }
+        /* Dynamic Geo Tag */
+        .geo-tag { text-align: center; font-size: 13px; color: #ff9900; margin-top: 10px; font-weight: bold; letter-spacing: 1px; }
 
         /* Main Center Tap to Unblur */
         .center-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
-        .unblur-btn { background: rgba(255, 153, 0, 0.1); border: 2px solid #ff9900; backdrop-filter: blur(10px); padding: 15px 30px; border-radius: 40px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(255, 153, 0, 0.4); animation: pulse-orange 2s infinite; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+        .unblur-btn { background: rgba(255, 153, 0, 0.15); border: 2px solid #ff9900; backdrop-filter: blur(5px); padding: 18px 35px; border-radius: 40px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 25px rgba(255, 153, 0, 0.5); animation: pulse-orange 2s infinite; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
         .unblur-btn svg { width: 24px; height: 24px; fill: #ff9900; }
         
-        .recent-views { margin-top: 15px; font-size: 13px; color: #aaa; background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 10px; }
+        .recent-views { margin-top: 20px; font-size: 13px; color: #aaa; background: rgba(0,0,0,0.6); padding: 6px 15px; border-radius: 12px; border: 1px solid #333; }
 
         /* Chat Area */
         .chat-container { height: 140px; padding: 0 20px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; mask-image: linear-gradient(to bottom, transparent, black 30%); -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%); }
         .chat-msg { font-size: 14px; margin-bottom: 8px; animation: slideUp 0.3s ease-out; text-shadow: 1px 1px 2px #000; }
         .chat-name { color: #ff9900; font-weight: bold; }
         .system-msg { color: #ff3b30; font-weight: bold; font-size: 13px; margin-bottom: 8px; animation: slideUp 0.3s ease-out; }
-        .typing-indicator { font-size: 12px; color: #00e676; font-style: italic; margin-bottom: 15px; height: 15px; }
+        .typing-indicator { font-size: 12px; color: #00e676; font-style: italic; margin-bottom: 15px; height: 15px; padding-left: 20px; }
 
         /* Bottom Status */
-        .bottom-bar { background: rgba(0, 0, 0, 0.8); padding: 12px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
+        .bottom-bar { background: rgba(0, 0, 0, 0.9); padding: 12px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
         .status-line { display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; font-weight: bold; }
         .green-dot { width: 10px; height: 10px; background: #00e676; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #00e676; }
 
         /* ================= SCREENS (Overlays) ================= */
-        .overlay-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.98); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; }
+        .overlay-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.98); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; }
         
-        /* Funnel Questions */
         .question-title { font-size: 28px; font-weight: 800; margin-bottom: 30px; color: #fff; line-height: 1.3; }
         .btn-group { display: flex; gap: 15px; width: 100%; max-width: 350px; }
         .btn-answer { flex: 1; padding: 15px; font-size: 20px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; text-transform: uppercase; }
         .btn-yes { background: #34c759; color: white; box-shadow: 0 5px 15px rgba(52, 199, 89, 0.4); }
         .btn-no { background: transparent; color: #aaa; border: 2px solid #555; }
 
-        /* Progress Bar Screen */
         .progress-container { width: 100%; max-width: 300px; height: 15px; background: #222; border-radius: 10px; overflow: hidden; margin: 20px 0; border: 1px solid #444; }
         .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff9900, #ff5500); transition: width 0.1s linear; }
         .progress-text { font-size: 18px; font-weight: bold; color: #ff9900; margin-top: 10px; }
 
-        /* Final Smartlink Screen */
-        .alert-icon { font-size: 50px; margin-bottom: 10px; }
         .final-title { color: #ff3b30; font-size: 26px; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; }
-        .final-desc { color: #ccc; font-size: 16px; margin-bottom: 30px; line-height: 1.6; }
-        .smartlink-btn { display: block; width: 100%; max-width: 350px; padding: 20px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; font-size: 20px; font-weight: 900; border-radius: 40px; box-shadow: 0 10px 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 1.5s infinite; text-transform: uppercase; letter-spacing: 1px; }
+        .final-desc { color: #ccc; font-size: 16px; margin-bottom: 20px; line-height: 1.6; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; color: #aaa; font-size: 13px; }
+        .checkbox-container input { transform: scale(1.3); accent-color: #ff9900; }
+        
+        .smartlink-btn { display: block; width: 100%; max-width: 350px; padding: 20px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; font-size: 20px; font-weight: 900; border-radius: 40px; box-shadow: 0 10px 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 1.5s infinite; text-transform: uppercase; }
 
         /* Animations */
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes pulse-orange { 0% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 25px rgba(255,153,0,0.7); } 100% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } }
+        @keyframes pulse-orange { 0% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,153,0,0.8); } 100% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes wave { 0%, 100% { height: 5px; } 50% { height: 15px; } }
     </style>
 </head>
 <body>
@@ -85,10 +103,15 @@
     <div class="app-container" id="screen-lobby">
         <div class="top-bar">
             <div class="logo">LIVE<span>JASMIN</span></div>
+            <!-- Audio Wave Trick -->
+            <div class="audio-wave">
+                <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
             <div class="rec-badge"><div class="rec-dot"></div> REC</div>
         </div>
         
-        <div class="device-tag">✔️ System: Din enhed understøtter HD-video</div>
+        <!-- Dynamic Geo Tag Trick -->
+        <div class="geo-tag" id="dynamic-city">📍 Danmark piger (2 km væk)</div>
 
         <div class="center-content">
             <button class="unblur-btn" onclick="startFunnel(1)">
@@ -109,28 +132,26 @@
         </div>
     </div>
 
-    <!-- FUNNEL STEP 1: AGE GATE -->
+    <!-- FUNNEL STEP 1 -->
     <div class="overlay-screen" id="funnel-1">
         <div class="question-title">Er du over 18 år gammel?</div>
         <div class="btn-group">
             <button class="btn-answer btn-no" onclick="startFunnel(2)">NEJ</button>
             <button class="btn-answer btn-yes" onclick="startFunnel(2)">JA</button>
         </div>
-        <p style="color:#666; font-size:12px; margin-top:20px;">Dette indhold er kun for voksne.</p>
     </div>
 
-    <!-- FUNNEL STEP 2: PRIVACY PROMISE -->
+    <!-- FUNNEL STEP 2 -->
     <div class="overlay-screen" id="funnel-2">
-        <div class="question-title">Lover du at holde denne piges identitet hemmelig?</div>
+        <div class="question-title">Lover du at holde hendes identitet hemmelig?</div>
         <div class="btn-group">
             <button class="btn-answer btn-yes" style="width:100%;" onclick="startLoading()">JEG LOVER</button>
         </div>
     </div>
 
-    <!-- FUNNEL STEP 3: 99% PROGRESS TRAP -->
+    <!-- FUNNEL STEP 3: LOADING TRAP -->
     <div class="overlay-screen" id="funnel-loading">
         <h2 style="color:white; margin-bottom: 10px;">Forbereder privat stream...</h2>
-        <p style="color:#aaa; font-size:14px;">Opretter sikker forbindelse</p>
         <div class="progress-container">
             <div class="progress-bar" id="p-bar"></div>
         </div>
@@ -139,28 +160,37 @@
 
     <!-- FUNNEL STEP 4: FINAL SMARTLINK -->
     <div class="overlay-screen" id="funnel-final">
-        <div class="alert-icon">⚠️</div>
-        <div class="final-title">Verifikation Påkrævet!</div>
+        <div class="final-title">⚠️ Verifikation Påkrævet</div>
         <div class="final-desc">
-            Streamen er sat på pause ved 99%.<br><br>
-            Opret en <span style="color:#ff9900; font-weight:bold;">Gratis Sikkerhedsprofil</span> for at bekræfte din alder og låse videoen op med det samme.
+            Streamen er sat på pause ved 99%.<br>Opret en <span style="color:#ff9900; font-weight:bold;">Gratis Sikkerhedsprofil</span> for at bekræfte din alder og låse videoen op.
         </div>
+        
+        <!-- Pre-Checked Box Trick -->
+        <label class="checkbox-container">
+            <input type="checkbox" checked readonly> Jeg accepterer vilkår og 18+ betingelser
+        </label>
         
         <!-- DIRECT TO YOUR OFFER LINK -->
         <a href="https://bedjfha.hubss.one/p/uyMfR" class="smartlink-btn">OPRET GRATIS ID NU</a>
-        
-        <p style="margin-top:25px; font-size:13px; color:#888;">Tager kun 1 minut. 100% Gratis i dag.</p>
     </div>
 
     <script>
-        // Fake Chat & System Messages
+        // Tab Hijacking Trick (Blinking Title)
+        let originalTitle = document.title;
+        window.addEventListener("blur", () => { document.title = "🔴 Venter på dig..."; });
+        window.addEventListener("focus", () => { document.title = originalTitle; });
+
+        // Dynamic Geo Tag Trick
+        const cities = ["København", "Aarhus", "Odense", "Aalborg", "Esbjerg"];
+        document.getElementById('dynamic-city').innerText = `📍 ${cities[Math.floor(Math.random() * cities.length)]} piger (2 km væk)`;
+
+        // Fake Chat Logic
         const names = ["Mikkel_88", "Søren_DK", "Gæst_912"];
         const messages = ["Wow! 😍", "Er du der?", "Klar til sjov 🔥", "Vis mig mere!"];
         const chatBox = document.getElementById('chat-box');
         
         function addChatMessage() {
             if(Math.random() > 0.8) {
-                // Insert Fake System Alert randomly
                 chatBox.innerHTML += `<div class="system-msg">[System]: Privat rum lukker om 3 min. pga. høj trafik.</div>`;
             } else {
                 const name = names[Math.floor(Math.random() * names.length)];
@@ -172,35 +202,29 @@
         }
         addChatMessage();
 
-        // Typing Indicator Animation
+        // Typing & Viewer Logic
         setInterval(() => {
             const typing = document.getElementById('typing');
             typing.style.opacity = typing.style.opacity == 1 ? 0 : 1;
         }, 1500);
 
-        // Dynamic Viewer Count
         let baseCount = 186229;
         setInterval(() => {
-            let fluctuation = Math.floor(Math.random() * 15) - 5; 
-            baseCount += fluctuation;
-            // Format number exactly like "186.229"
+            baseCount += Math.floor(Math.random() * 15) - 5;
             document.getElementById('view-count').innerText = baseCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }, 3500);
 
-        // FUNNEL LOGIC
+        // Funnel Progression
         function startFunnel(step) {
             if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(e=>{});
             if (navigator.vibrate) navigator.vibrate(50);
             
+            document.querySelectorAll('.overlay-screen').forEach(el => el.style.display = 'none');
             document.getElementById('screen-lobby').style.display = 'none';
-            document.getElementById('funnel-1').style.display = 'none';
-            document.getElementById('funnel-2').style.display = 'none';
-            
-            if(step === 1) document.getElementById('funnel-1').style.display = 'flex';
-            if(step === 2) document.getElementById('funnel-2').style.display = 'flex';
+            document.getElementById(`funnel-${step}`).style.display = 'flex';
         }
 
-        // 99% Loading Trap
+        // 99% Loading Logic
         function startLoading() {
             if (navigator.vibrate) navigator.vibrate(50);
             document.getElementById('funnel-2').style.display = 'none';
@@ -211,9 +235,7 @@
             let text = document.getElementById('p-text');
             
             let interval = setInterval(() => {
-                // Fast load up to 80%, slow to 99%
-                let increment = percent < 80 ? Math.floor(Math.random() * 10) + 5 : Math.floor(Math.random() * 3) + 1;
-                percent += increment;
+                percent += percent < 80 ? Math.floor(Math.random() * 10) + 5 : Math.floor(Math.random() * 3) + 1;
                 
                 if(percent >= 99) {
                     percent = 99;
@@ -221,7 +243,6 @@
                     bar.style.width = '99%';
                     text.innerText = '99';
                     
-                    // Hold at 99% for a second, then show final trap
                     setTimeout(() => {
                         document.getElementById('funnel-loading').style.display = 'none';
                         document.getElementById('funnel-final').style.display = 'flex';
