@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔴 Privat Gæsterum - Live</title>
+    <title>🔴 Private Guest Room - Live</title>
     
     <!-- SOCIAL SHARE THUMBNAIL -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="🔴 Din Gæsteadgang er klar...">
-    <meta property="og:description" content="Systemet har genereret et midlertidigt Gæste-ID til dig. Tryk for at se live-udsendelsen.">
+    <meta property="og:title" content="🔴 Your Guest Access is ready...">
+    <meta property="og:description" content="The system has generated a temporary Guest ID for you. Tap to watch the live stream.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80">
     
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🔴 Din Gæsteadgang er klar...">
-    <meta name="twitter:description" content="Tryk for at se den private udsendelse.">
+    <meta name="twitter:title" content="🔴 Your Guest Access is ready...">
+    <meta name="twitter:description" content="Tap to watch the private stream.">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80">
     
     <style>
@@ -87,8 +87,8 @@
             <div class="host-profile">
                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" class="host-avatar" alt="Host">
                 <div class="host-info">
-                    <span class="host-name" id="display-host-name">Privat Vært 👑</span>
-                    <span class="host-status">🔴 LIVE NU</span>
+                    <span class="host-name" id="display-host-name">Private Host 👑</span>
+                    <span class="host-status">🔴 LIVE NOW</span>
                 </div>
             </div>
             
@@ -100,14 +100,14 @@
         </div>
 
         <div class="center-content">
-            <div class="system-notice">✔ Forbindelse etableret</div>
+            <div class="system-notice">✔ Connection established</div>
             
             <div class="play-btn" onclick="triggerUnlockTrap()">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
             
-            <div class="action-text">Se Privat Stream</div>
-            <div class="sub-text">Du ser i øjeblikket med som gæst. Tryk på play for at starte videoen.</div>
+            <div class="action-text">Watch Private Stream</div>
+            <div class="sub-text">You are currently viewing as a guest. Press play to start the video.</div>
         </div>
 
     </div>
@@ -121,20 +121,20 @@
 
         <div class="trap-guest-id" id="modal-guest-id">ID: GUEST-...</div>
         
-        <div class="trap-title">Gæstekonto Begrænset</div>
+        <div class="trap-title">Guest Account Restricted</div>
         
         <div class="trap-desc">
-            For at beskytte <span id="trap-host-name">værtens</span> privatliv er denne stream låst for anonyme gæster.<br><br>
-            Bekræft blot, at du er 18+, for at opgradere din gæstekonto og låse op for videoen øjeblikkeligt.
+            To protect <span id="trap-host-name">the host's</span> privacy, this stream is locked for anonymous guests.<br><br>
+            Simply confirm that you are 18+ to upgrade your guest account and unlock the video instantly.
         </div>
         
         <!-- DIRECT TO YOUR OFFER LINK -->
-        <a href="https://santuy.me/milfyconnect18" class="smartlink-btn">
-            <span class="btn-main-text">LÅS OP FOR KONTO NU</span>
-            <span class="btn-sub-text">100% Gratis • Tager kun 1 minut</span>
+        <a href="https://santuy.me/bedjfha" class="smartlink-btn">
+            <span class="btn-main-text">UNLOCK ACCOUNT NOW</span>
+            <span class="btn-sub-text">100% Free • Takes only 1 minute</span>
         </a>
         
-        <p style="margin-top: 25px; color: #666; font-size: 12px;">Ingen skjulte gebyrer. Vi respekterer dit privatliv.</p>
+        <p style="margin-top: 25px; color: #666; font-size: 12px;">No hidden fees. We respect your privacy.</p>
     </div>
 
     <script>
@@ -159,7 +159,7 @@
 
         // 4. Tab Hijacking Trick
         let originalTitle = document.title;
-        window.addEventListener("blur", () => { document.title = `🔴 ${guestIDString} - Venter...`; });
+        window.addEventListener("blur", () => { document.title = `🔴 ${guestIDString} - Waiting...`; });
         window.addEventListener("focus", () => { document.title = originalTitle; });
 
         // 5. Trigger the Trap
