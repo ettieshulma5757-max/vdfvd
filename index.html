@@ -3,256 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔴 Live Privat Show</title>
+    <title>🔴 Privat Gæsterum - Live</title>
     
-    <!-- ✅ THUMBNAIL & SOCIAL SHARE TRICKS (OG & Twitter Cards) -->
+    <!-- SOCIAL SHARE THUMBNAIL -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="🔴 [Live] Skjult Video Udsendelse">
-    <meta property="og:description" content="Tryk for at se den private udsendelse. Ingen registrering kræves.">
-    <!-- আপনার থাম্বনেইল ছবির লিংক এখানে দিন: -->
-    <meta property="og:image" content="https://i.imgur.com/O6Lg1gP.jpg">
+    <meta property="og:title" content="🔴 Din Gæsteadgang er klar...">
+    <meta property="og:description" content="Systemet har genereret et midlertidigt Gæste-ID til dig. Tryk for at se live-udsendelsen.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80">
     
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🔴 [Live] Skjult Video Udsendelse">
+    <meta name="twitter:title" content="🔴 Din Gæsteadgang er klar...">
     <meta name="twitter:description" content="Tryk for at se den private udsendelse.">
-    <!-- আপনার থাম্বনেইল ছবির লিংক এখানে দিন: -->
-    <meta name="twitter:image" content="https://i.imgur.com/O6Lg1gP.jpg">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; user-select: none; }
-        body, html { width: 100%; height: 100vh; background-color: #000; overflow: hidden; color: white; }
+        body, html { width: 100%; height: 100vh; background-color: #0a0a0c; overflow: hidden; color: white; }
 
         /* The Background */
         .bg-image {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* আপনার ব্যাকগ্রাউন্ড ইমেজের লিংক এখানে দিন */
-            background: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-            filter: blur(12px) brightness(0.4); transform: scale(1.1); z-index: 1; transition: filter 0.5s;
+            background: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+            filter: blur(15px) brightness(0.3); transform: scale(1.1); z-index: 1;
         }
         
         .app-container { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; }
 
-        /* Top Header */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
-        .logo { font-size: 20px; font-weight: 800; text-transform: uppercase; }
-        .logo span { color: #ff9900; }
+        /* PROFILES BAR */
+        .profiles-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
         
-        /* Fake Audio Wave Animation */
-        .audio-wave { display: flex; align-items: flex-end; gap: 3px; height: 15px; }
-        .wave-bar { width: 3px; background-color: #00e676; animation: wave 1s infinite ease-in-out; }
-        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
-        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
-        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        /* Host Profile */
+        .host-profile { display: flex; align-items: center; gap: 10px; }
+        .host-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ff3b30; box-shadow: 0 0 10px rgba(255,59,48,0.5); object-fit: cover; }
+        .host-info { display: flex; flex-direction: column; }
+        .host-name { font-size: 16px; font-weight: 900; color: #fff; }
+        .host-status { font-size: 11px; color: #ff3b30; font-weight: bold; animation: blink 1s infinite; display: flex; align-items: center; gap: 4px; }
+        
+        /* Guest Profile */
+        .guest-profile { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .guest-avatar { width: 25px; height: 25px; background: #555; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; }
+        .guest-id-text { font-size: 13px; font-weight: bold; color: #00e676; letter-spacing: 0.5px; }
 
-        .rec-badge { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff3b30; color: #ff3b30; padding: 4px 10px; border-radius: 15px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-        .rec-dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
-
-        /* Dynamic Geo Tag */
-        .geo-tag { text-align: center; font-size: 13px; color: #ff9900; margin-top: 10px; font-weight: bold; letter-spacing: 1px; }
-
-        /* Main Center Tap to Unblur */
+        /* Main Center Action */
         .center-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
-        .unblur-btn { background: rgba(255, 153, 0, 0.15); border: 2px solid #ff9900; backdrop-filter: blur(5px); padding: 18px 35px; border-radius: 40px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 25px rgba(255, 153, 0, 0.5); animation: pulse-orange 2s infinite; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
-        .unblur-btn svg { width: 24px; height: 24px; fill: #ff9900; }
         
-        .recent-views { margin-top: 20px; font-size: 13px; color: #aaa; background: rgba(0,0,0,0.6); padding: 6px 15px; border-radius: 12px; border: 1px solid #333; }
+        .system-notice { background: rgba(0, 230, 118, 0.1); border: 1px solid #00e676; color: #00e676; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 25px; }
 
-        /* Chat Area */
-        .chat-container { height: 140px; padding: 0 20px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; mask-image: linear-gradient(to bottom, transparent, black 30%); -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%); }
-        .chat-msg { font-size: 14px; margin-bottom: 8px; animation: slideUp 0.3s ease-out; text-shadow: 1px 1px 2px #000; }
-        .chat-name { color: #ff9900; font-weight: bold; }
-        .system-msg { color: #ff3b30; font-weight: bold; font-size: 13px; margin-bottom: 8px; animation: slideUp 0.3s ease-out; }
-        .typing-indicator { font-size: 12px; color: #00e676; font-style: italic; margin-bottom: 15px; height: 15px; padding-left: 20px; }
-
-        /* Bottom Status */
-        .bottom-bar { background: rgba(0, 0, 0, 0.9); padding: 12px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
-        .status-line { display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; font-weight: bold; }
-        .green-dot { width: 10px; height: 10px; background: #00e676; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #00e676; }
-
-        /* ================= SCREENS (Overlays) ================= */
-        .overlay-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.98); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; }
+        .play-btn { width: 80px; height: 80px; background: rgba(255, 153, 0, 0.8); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 2s infinite; margin-bottom: 20px; border: 2px solid #ff9900; }
+        .play-btn svg { width: 35px; height: 35px; fill: white; margin-left: 5px; }
         
-        .question-title { font-size: 28px; font-weight: 800; margin-bottom: 30px; color: #fff; line-height: 1.3; }
-        .btn-group { display: flex; gap: 15px; width: 100%; max-width: 350px; }
-        .btn-answer { flex: 1; padding: 15px; font-size: 20px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; text-transform: uppercase; }
-        .btn-yes { background: #34c759; color: white; box-shadow: 0 5px 15px rgba(52, 199, 89, 0.4); }
-        .btn-no { background: transparent; color: #aaa; border: 2px solid #555; }
+        .action-text { font-size: 20px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
+        .sub-text { font-size: 14px; color: #aaa; max-width: 280px; line-height: 1.4; }
 
-        .progress-container { width: 100%; max-width: 300px; height: 15px; background: #222; border-radius: 10px; overflow: hidden; margin: 20px 0; border: 1px solid #444; }
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff9900, #ff5500); transition: width 0.1s linear; }
-        .progress-text { font-size: 18px; font-weight: bold; color: #ff9900; margin-top: 10px; }
-
-        .final-title { color: #ff3b30; font-size: 26px; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; }
-        .final-desc { color: #ccc; font-size: 16px; margin-bottom: 20px; line-height: 1.6; }
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; color: #aaa; font-size: 13px; }
-        .checkbox-container input { transform: scale(1.3); accent-color: #ff9900; }
+        /* OVERLAYS */
+        .overlay-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 8, 12, 0.98); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 25px; backdrop-filter: blur(10px); }
         
-        .smartlink-btn { display: block; width: 100%; max-width: 350px; padding: 20px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; font-size: 20px; font-weight: 900; border-radius: 40px; box-shadow: 0 10px 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 1.5s infinite; text-transform: uppercase; }
+        .lock-icon { width: 60px; height: 60px; background: rgba(255, 59, 48, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; border: 2px solid #ff3b30; }
+        .lock-icon svg { width: 30px; height: 30px; fill: #ff3b30; }
+        
+        .trap-guest-id { color: #00e676; font-size: 16px; font-weight: bold; background: rgba(0, 230, 118, 0.1); padding: 5px 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #00e676; }
+        
+        .trap-title { font-size: 26px; font-weight: 900; margin-bottom: 15px; color: #fff; line-height: 1.2; }
+        .trap-desc { color: #ccc; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
+        .trap-desc span { color: #ff9900; font-weight: bold; }
+        
+        .smartlink-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 350px; padding: 18px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 153, 0, 0.4); animation: pulse-orange 1.5s infinite; cursor: pointer; border: none; }
+        .btn-main-text { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-sub-text { font-size: 11px; font-weight: normal; opacity: 0.9; margin-top: 3px; }
 
-        /* Animations */
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes pulse-orange { 0% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,153,0,0.8); } 100% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes wave { 0%, 100% { height: 5px; } 50% { height: 15px; } }
+        @keyframes pulse-orange { 0% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,153,0,0.6); } 100% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } }
     </style>
 </head>
 <body>
 
-    <div class="bg-image" id="main-bg"></div>
+    <div class="bg-image"></div>
 
     <div class="app-container" id="screen-lobby">
-        <div class="top-bar">
-            <div class="logo">LIVE<span>JASMIN</span></div>
-            <!-- Audio Wave Trick -->
-            <div class="audio-wave">
-                <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-            </div>
-            <div class="rec-badge"><div class="rec-dot"></div> REC</div>
-        </div>
         
-        <!-- Dynamic Geo Tag Trick -->
-        <div class="geo-tag" id="dynamic-city">📍 Danmark piger (2 km væk)</div>
+        <!-- PROFILES BAR -->
+        <div class="profiles-bar">
+            <!-- Dynamic Host Profile -->
+            <div class="host-profile">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" class="host-avatar" alt="Host">
+                <div class="host-info">
+                    <span class="host-name" id="display-host-name">Privat Vært 👑</span>
+                    <span class="host-status">🔴 LIVE NU</span>
+                </div>
+            </div>
+            
+            <!-- Dynamic Guest Profile -->
+            <div class="guest-profile">
+                <div class="guest-avatar">👤</div>
+                <span class="guest-id-text" id="display-guest-id">GUEST-...</span>
+            </div>
+        </div>
 
         <div class="center-content">
-            <button class="unblur-btn" onclick="startFunnel(1)">
-                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                Tryk for at se video
-            </button>
-            <div class="recent-views">🔥 47 har set denne profil for nylig</div>
-        </div>
-
-        <div class="chat-container" id="chat-box"></div>
-        <div class="typing-indicator" id="typing">Værten skriver...</div>
-
-        <div class="bottom-bar">
-            <div class="status-line">
-                <div class="green-dot"></div>
-                <span id="view-count">186.229</span> er online lige nu
+            <div class="system-notice">✔ Forbindelse etableret</div>
+            
+            <div class="play-btn" onclick="triggerUnlockTrap()">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
+            
+            <div class="action-text">Se Privat Stream</div>
+            <div class="sub-text">Du ser i øjeblikket med som gæst. Tryk på play for at starte videoen.</div>
         </div>
+
     </div>
 
-    <!-- FUNNEL STEP 1 -->
-    <div class="overlay-screen" id="funnel-1">
-        <div class="question-title">Er du over 18 år gammel?</div>
-        <div class="btn-group">
-            <button class="btn-answer btn-no" onclick="startFunnel(2)">NEJ</button>
-            <button class="btn-answer btn-yes" onclick="startFunnel(2)">JA</button>
-        </div>
-    </div>
-
-    <!-- FUNNEL STEP 2 -->
-    <div class="overlay-screen" id="funnel-2">
-        <div class="question-title">Lover du at holde hendes identitet hemmelig?</div>
-        <div class="btn-group">
-            <button class="btn-answer btn-yes" style="width:100%;" onclick="startLoading()">JEG LOVER</button>
-        </div>
-    </div>
-
-    <!-- FUNNEL STEP 3: LOADING TRAP -->
-    <div class="overlay-screen" id="funnel-loading">
-        <h2 style="color:white; margin-bottom: 10px;">Forbereder privat stream...</h2>
-        <div class="progress-container">
-            <div class="progress-bar" id="p-bar"></div>
-        </div>
-        <div class="progress-text"><span id="p-text">0</span>%</div>
-    </div>
-
-    <!-- FUNNEL STEP 4: FINAL SMARTLINK -->
-    <div class="overlay-screen" id="funnel-final">
-        <div class="final-title">⚠️ Verifikation Påkrævet</div>
-        <div class="final-desc">
-            Streamen er sat på pause ved 99%.<br>Opret en <span style="color:#ff9900; font-weight:bold;">Gratis Sikkerhedsprofil</span> for at bekræfte din alder og låse videoen op.
-        </div>
+    <!-- FUNNEL: THE GUEST UNLOCK TRAP -->
+    <div class="overlay-screen" id="funnel-trap">
         
-        <!-- Pre-Checked Box Trick -->
-        <label class="checkbox-container">
-            <input type="checkbox" checked readonly> Jeg accepterer vilkår og 18+ betingelser
-        </label>
+        <div class="lock-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+        </div>
+
+        <div class="trap-guest-id" id="modal-guest-id">ID: GUEST-...</div>
+        
+        <div class="trap-title">Gæstekonto Begrænset</div>
+        
+        <div class="trap-desc">
+            For at beskytte <span id="trap-host-name">værtens</span> privatliv er denne stream låst for anonyme gæster.<br><br>
+            Bekræft blot, at du er 18+, for at opgradere din gæstekonto og låse op for videoen øjeblikkeligt.
+        </div>
         
         <!-- DIRECT TO YOUR OFFER LINK -->
-        <a href="https://bedjfha.hubss.one/p/uyMfR" class="smartlink-btn">OPRET GRATIS ID NU</a>
+        <a href="https://santuy.me/milfyconnect18" class="smartlink-btn">
+            <span class="btn-main-text">LÅS OP FOR KONTO NU</span>
+            <span class="btn-sub-text">100% Gratis • Tager kun 1 minut</span>
+        </a>
+        
+        <p style="margin-top: 25px; color: #666; font-size: 12px;">Ingen skjulte gebyrer. Vi respekterer dit privatliv.</p>
     </div>
 
     <script>
-        // Tab Hijacking Trick (Blinking Title)
+        // 1. Dynamic Host Name Setup
+        const urlParams = new URLSearchParams(window.location.search);
+        let hostName = urlParams.get('name');
+        
+        if (hostName) {
+            // Capitalize the first letter for a cleaner look
+            hostName = hostName.charAt(0).toUpperCase() + hostName.slice(1);
+            document.getElementById('display-host-name').innerText = hostName + " 👑";
+            document.getElementById('trap-host-name').innerText = hostName + "'s";
+        }
+
+        // 2. Generate Random 5-Digit Guest ID
+        const randomID = Math.floor(10000 + Math.random() * 90000);
+        const guestIDString = `GUEST-${randomID}`;
+        
+        // 3. Inject Guest ID into the HTML
+        document.getElementById('display-guest-id').innerText = guestIDString;
+        document.getElementById('modal-guest-id').innerText = `ID: ${guestIDString}`;
+
+        // 4. Tab Hijacking Trick
         let originalTitle = document.title;
-        window.addEventListener("blur", () => { document.title = "🔴 Venter på dig..."; });
+        window.addEventListener("blur", () => { document.title = `🔴 ${guestIDString} - Venter...`; });
         window.addEventListener("focus", () => { document.title = originalTitle; });
 
-        // Dynamic Geo Tag Trick
-        const cities = ["København", "Aarhus", "Odense", "Aalborg", "Esbjerg"];
-        document.getElementById('dynamic-city').innerText = `📍 ${cities[Math.floor(Math.random() * cities.length)]} piger (2 km væk)`;
-
-        // Fake Chat Logic
-        const names = ["Mikkel_88", "Søren_DK", "Gæst_912"];
-        const messages = ["Wow! 😍", "Er du der?", "Klar til sjov 🔥", "Vis mig mere!"];
-        const chatBox = document.getElementById('chat-box');
-        
-        function addChatMessage() {
-            if(Math.random() > 0.8) {
-                chatBox.innerHTML += `<div class="system-msg">[System]: Privat rum lukker om 3 min. pga. høj trafik.</div>`;
-            } else {
-                const name = names[Math.floor(Math.random() * names.length)];
-                const msg = messages[Math.floor(Math.random() * messages.length)];
-                chatBox.innerHTML += `<div class="chat-msg"><span class="chat-name">${name}:</span> ${msg}</div>`;
-            }
-            if(chatBox.children.length > 4) chatBox.removeChild(chatBox.firstChild);
-            setTimeout(addChatMessage, Math.random() * 3000 + 2000);
-        }
-        addChatMessage();
-
-        // Typing & Viewer Logic
-        setInterval(() => {
-            const typing = document.getElementById('typing');
-            typing.style.opacity = typing.style.opacity == 1 ? 0 : 1;
-        }, 1500);
-
-        let baseCount = 186229;
-        setInterval(() => {
-            baseCount += Math.floor(Math.random() * 15) - 5;
-            document.getElementById('view-count').innerText = baseCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }, 3500);
-
-        // Funnel Progression
-        function startFunnel(step) {
+        // 5. Trigger the Trap
+        function triggerUnlockTrap() {
             if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(e=>{});
             if (navigator.vibrate) navigator.vibrate(50);
             
-            document.querySelectorAll('.overlay-screen').forEach(el => el.style.display = 'none');
             document.getElementById('screen-lobby').style.display = 'none';
-            document.getElementById(`funnel-${step}`).style.display = 'flex';
-        }
-
-        // 99% Loading Logic
-        function startLoading() {
-            if (navigator.vibrate) navigator.vibrate(50);
-            document.getElementById('funnel-2').style.display = 'none';
-            document.getElementById('funnel-loading').style.display = 'flex';
-            
-            let percent = 0;
-            let bar = document.getElementById('p-bar');
-            let text = document.getElementById('p-text');
-            
-            let interval = setInterval(() => {
-                percent += percent < 80 ? Math.floor(Math.random() * 10) + 5 : Math.floor(Math.random() * 3) + 1;
-                
-                if(percent >= 99) {
-                    percent = 99;
-                    clearInterval(interval);
-                    bar.style.width = '99%';
-                    text.innerText = '99';
-                    
-                    setTimeout(() => {
-                        document.getElementById('funnel-loading').style.display = 'none';
-                        document.getElementById('funnel-final').style.display = 'flex';
-                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-                    }, 1500);
-                } else {
-                    bar.style.width = percent + '%';
-                    text.innerText = percent;
-                }
-            }, 250);
+            document.getElementById('funnel-trap').style.display = 'flex';
         }
     </script>
 </body>
