@@ -3,173 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔴 Private Guest Room - Live</title>
-    
-    <!-- SOCIAL SHARE THUMBNAIL -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="🔴 Your Guest Access is ready...">
-    <meta property="og:description" content="The system has generated a temporary Guest ID for you. Tap to watch the live stream.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80">
-    
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🔴 Your Guest Access is ready...">
-    <meta name="twitter:description" content="Tap to watch the private stream.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80">
+    <title>🔴 Private Live Room</title>
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; user-select: none; }
-        body, html { width: 100%; height: 100vh; background-color: #0a0a0c; overflow: hidden; color: white; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+        body, html { width: 100%; height: 100vh; background-color: #000; overflow: hidden; color: white; }
 
-        /* The Background */
-        .bg-image {
+        /* --- PREMIUM LIVE BACKGROUND --- */
+        .live-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-            filter: blur(15px) brightness(0.3); transform: scale(1.1); z-index: 1;
+            background: url('https://images.unsplash.com/photo-1616248232938-16e537e28328?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+            filter: blur(8px) brightness(0.6);
+            transform: scale(1.05);
+            z-index: 1;
+            animation: breathe 5s infinite alternate ease-in-out;
         }
-        
-        .app-container { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; }
 
-        /* PROFILES BAR */
-        .profiles-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        
-        /* Host Profile */
-        .host-profile { display: flex; align-items: center; gap: 10px; }
-        .host-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ff3b30; box-shadow: 0 0 10px rgba(255,59,48,0.5); object-fit: cover; }
-        .host-info { display: flex; flex-direction: column; }
-        .host-name { font-size: 16px; font-weight: 900; color: #fff; }
-        .host-status { font-size: 11px; color: #ff3b30; font-weight: bold; animation: blink 1s infinite; display: flex; align-items: center; gap: 4px; }
-        
-        /* Guest Profile */
-        .guest-profile { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        .guest-avatar { width: 25px; height: 25px; background: #555; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; }
-        .guest-id-text { font-size: 13px; font-weight: bold; color: #00e676; letter-spacing: 0.5px; }
+        @keyframes breathe { 0% { transform: scale(1.05); filter: blur(8px) brightness(0.6); } 100% { transform: scale(1.1); filter: blur(6px) brightness(0.7); } }
 
-        /* Main Center Action */
-        .center-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
-        
-        .system-notice { background: rgba(0, 230, 118, 0.1); border: 1px solid #00e676; color: #00e676; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 25px; }
+        .ui-layer { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 20px 15px; }
 
-        .play-btn { width: 80px; height: 80px; background: rgba(255, 153, 0, 0.8); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 30px rgba(255, 153, 0, 0.5); animation: pulse-orange 2s infinite; margin-bottom: 20px; border: 2px solid #ff9900; }
-        .play-btn svg { width: 35px; height: 35px; fill: white; margin-left: 5px; }
+        /* --- TOP BAR: HOST INFO & STATS --- */
+        .top-bar { display: flex; justify-content: space-between; align-items: flex-start; }
         
-        .action-text { font-size: 20px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
-        .sub-text { font-size: 14px; color: #aaa; max-width: 280px; line-height: 1.4; }
+        .host-badge { background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); padding: 5px 15px 5px 5px; border-radius: 40px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .host-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ff2a5f; }
+        .host-details { display: flex; flex-direction: column; }
+        .host-name-wrapper { display: flex; align-items: center; gap: 5px; }
+        .host-name { font-size: 14px; font-weight: 700; color: #fff; }
+        .verified-tick { width: 14px; height: 14px; background: #00e676; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 9px; color: black; font-weight: bold; }
+        .live-tag { font-size: 10px; color: #ff2a5f; font-weight: 800; letter-spacing: 1px; animation: pulse 1s infinite; }
 
-        /* OVERLAYS */
-        .overlay-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 8, 12, 0.98); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 25px; backdrop-filter: blur(10px); }
-        
-        .lock-icon { width: 60px; height: 60px; background: rgba(255, 59, 48, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; border: 2px solid #ff3b30; }
-        .lock-icon svg { width: 30px; height: 30px; fill: #ff3b30; }
-        
-        .trap-guest-id { color: #00e676; font-size: 16px; font-weight: bold; background: rgba(0, 230, 118, 0.1); padding: 5px 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #00e676; }
-        
-        .trap-title { font-size: 26px; font-weight: 900; margin-bottom: 15px; color: #fff; line-height: 1.2; }
-        .trap-desc { color: #ccc; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
-        .trap-desc span { color: #ff9900; font-weight: bold; }
-        
-        .smartlink-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 350px; padding: 18px; background: linear-gradient(90deg, #ff9900, #ff5500); color: #fff; text-decoration: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 153, 0, 0.4); animation: pulse-orange 1.5s infinite; cursor: pointer; border: none; }
-        .btn-main-text { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-sub-text { font-size: 11px; font-weight: normal; opacity: 0.9; margin-top: 3px; }
+        .stats-badge { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes pulse-orange { 0% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,153,0,0.6); } 100% { box-shadow: 0 0 10px rgba(255,153,0,0.3); } }
+        /* --- BOTTOM BAR: FAKE CHAT --- */
+        .bottom-bar { display: flex; flex-direction: column; gap: 15px; padding-bottom: 20px; width: 85%; mask-image: linear-gradient(to top, black 50%, transparent 100%); -webkit-mask-image: linear-gradient(to top, black 70%, transparent 100%); }
+        
+        .chat-box { max-height: 200px; overflow-y: hidden; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { font-size: 13px; line-height: 1.4; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); animation: slideUp 0.3s ease-out; }
+        .chat-name { font-weight: 700; color: #ffce00; margin-right: 5px; }
+        .chat-name.system { color: #00e676; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* --- THE TRAP MODAL (GLASSMORPHISM) --- */
+        .overlay-trap { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); z-index: 100; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        
+        .modal-box { background: rgba(20, 20, 25, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px 20px; width: 100%; max-width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; }
+
+        .pulse-ring { width: 70px; height: 70px; border-radius: 50%; background: rgba(255, 42, 95, 0.1); border: 2px solid #ff2a5f; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; box-shadow: 0 0 20px rgba(255,42,95,0.4); }
+        .pulse-ring svg { width: 35px; height: 35px; fill: #ff2a5f; }
+
+        .guest-badge { background: #222; border: 1px solid #444; padding: 5px 15px; border-radius: 20px; font-size: 12px; color: #aaa; margin-bottom: 15px; font-weight: 600; letter-spacing: 1px; }
+        .guest-badge span { color: #00e676; }
+
+        .modal-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+        .modal-desc { font-size: 14px; color: #999; margin-bottom: 25px; line-height: 1.5; }
+        .modal-desc strong { color: #fff; }
+
+        /* Premium Gradient Button */
+        .action-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #ff2a5f 0%, #ff7b00 100%); border: none; border-radius: 14px; color: white; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 10px 20px rgba(255, 42, 95, 0.3); transition: transform 0.2s; }
+        .action-btn:active { transform: scale(0.97); }
+        .btn-sub { font-size: 10px; font-weight: 500; opacity: 0.9; text-transform: none; }
+
+        .secure-footer { margin-top: 20px; font-size: 11px; color: #555; display: flex; align-items: center; gap: 5px; }
+        .secure-footer svg { width: 12px; height: 12px; fill: #555; }
     </style>
 </head>
-<body>
+<body onclick="showTrap()">
 
-    <div class="bg-image"></div>
+    <!-- Animated Blurred Background -->
+    <div class="live-bg"></div>
 
-    <div class="app-container" id="screen-lobby">
+    <!-- Live UI Overlay -->
+    <div class="ui-layer" id="live-ui">
         
-        <!-- PROFILES BAR -->
-        <div class="profiles-bar">
-            <!-- Dynamic Host Profile -->
-            <div class="host-profile">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="host-badge">
                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" class="host-avatar" alt="Host">
-                <div class="host-info">
-                    <span class="host-name" id="display-host-name">Private Host 👑</span>
-                    <span class="host-status">🔴 LIVE NOW</span>
+                <div class="host-details">
+                    <div class="host-name-wrapper">
+                        <span class="host-name" id="host-name-display">Private Host</span>
+                        <div class="verified-tick">✓</div>
+                    </div>
+                    <span class="live-tag">● LIVE</span>
                 </div>
             </div>
-            
-            <!-- Dynamic Guest Profile -->
-            <div class="guest-profile">
-                <div class="guest-avatar">👤</div>
-                <span class="guest-id-text" id="display-guest-id">GUEST-...</span>
-            </div>
+            <div class="stats-badge">👁️ 4,812</div>
         </div>
 
-        <div class="center-content">
-            <div class="system-notice">✔ Connection established</div>
-            
-            <div class="play-btn" onclick="triggerUnlockTrap()">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <!-- Bottom Bar (Fake Chat) -->
+        <div class="bottom-bar">
+            <div class="chat-box" id="chat-container">
+                <div class="chat-msg"><span class="chat-name system">System:</span> Welcome to the private room.</div>
             </div>
-            
-            <div class="action-text">Watch Private Stream</div>
-            <div class="sub-text">You are currently viewing as a guest. Press play to start the video.</div>
         </div>
-
     </div>
 
-    <!-- FUNNEL: THE GUEST UNLOCK TRAP -->
-    <div class="overlay-screen" id="funnel-trap">
-        
-        <div class="lock-icon">
-            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
-        </div>
+    <!-- THE PREMIUM TRAP MODAL -->
+    <div class="overlay-trap" id="trap-modal">
+        <div class="modal-box">
+            
+            <div class="pulse-ring">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            </div>
 
-        <div class="trap-guest-id" id="modal-guest-id">ID: GUEST-...</div>
-        
-        <div class="trap-title">Guest Account Restricted</div>
-        
-        <div class="trap-desc">
-            To protect <span id="trap-host-name">the host's</span> privacy, this stream is locked for anonymous guests.<br><br>
-            Simply confirm that you are 18+ to upgrade your guest account and unlock the video instantly.
+            <div class="guest-badge">Logged in as: <span id="trap-guest-id">GUEST-...</span></div>
+            
+            <div class="modal-title">Age Verification Required</div>
+            <div class="modal-desc">
+                This stream contains <strong>18+ Content</strong>. To unmute and unblur <span id="trap-host-name">the host's</span> private video, please verify your guest account.
+            </div>
+
+            <!-- OFFER LINK -->
+            <a href="https://santuy.me/bedjfha" class="action-btn">
+                <span>Verify Age & Unblur</span>
+                <span class="btn-sub">Takes 30 seconds • 100% Free</span>
+            </a>
+
+            <div class="secure-footer">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                Secure & Anonymous Verification
+            </div>
         </div>
-        
-        <!-- DIRECT TO YOUR OFFER LINK -->
-        <a href="https://santuy.me/bedjfha" class="smartlink-btn">
-            <span class="btn-main-text">UNLOCK ACCOUNT NOW</span>
-            <span class="btn-sub-text">100% Free • Takes only 1 minute</span>
-        </a>
-        
-        <p style="margin-top: 25px; color: #666; font-size: 12px;">No hidden fees. We respect your privacy.</p>
     </div>
 
     <script>
-        // 1. Dynamic Host Name Setup
+        // 1. Setup Dynamic Name
         const urlParams = new URLSearchParams(window.location.search);
         let hostName = urlParams.get('name');
-        
         if (hostName) {
-            // Capitalize the first letter for a cleaner look
             hostName = hostName.charAt(0).toUpperCase() + hostName.slice(1);
-            document.getElementById('display-host-name').innerText = hostName + " 👑";
+            document.getElementById('host-name-display').innerText = hostName;
             document.getElementById('trap-host-name').innerText = hostName + "'s";
         }
 
-        // 2. Generate Random 5-Digit Guest ID
+        // 2. Setup Guest ID
         const randomID = Math.floor(10000 + Math.random() * 90000);
-        const guestIDString = `GUEST-${randomID}`;
-        
-        // 3. Inject Guest ID into the HTML
-        document.getElementById('display-guest-id').innerText = guestIDString;
-        document.getElementById('modal-guest-id').innerText = `ID: ${guestIDString}`;
+        document.getElementById('trap-guest-id').innerText = `GUEST-${randomID}`;
 
-        // 4. Tab Hijacking Trick
-        let originalTitle = document.title;
-        window.addEventListener("blur", () => { document.title = `🔴 ${guestIDString} - Waiting...`; });
-        window.addEventListener("focus", () => { document.title = originalTitle; });
+        // 3. Fake Live Chat Generator
+        const chatNames = ["Mike", "Guest-892", "Dave_xx", "User44", "AlphaD", "Guest-110", "Tom"];
+        const chatMsgs = ["Show more! 🔥", "Wow you look amazing", "Can you unmute?", "Damn...", "Hello from UK", "🥵🥵", "Turn around baby"];
+        const chatContainer = document.getElementById('chat-container');
 
-        // 5. Trigger the Trap
-        function triggerUnlockTrap() {
-            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(e=>{});
-            if (navigator.vibrate) navigator.vibrate(50);
+        let chatInterval = setInterval(() => {
+            const name = chatNames[Math.floor(Math.random() * chatNames.length)];
+            const msg = chatMsgs[Math.floor(Math.random() * chatMsgs.length)];
             
-            document.getElementById('screen-lobby').style.display = 'none';
-            document.getElementById('funnel-trap').style.display = 'flex';
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-msg';
+            msgDiv.innerHTML = `<span class="chat-name">${name}:</span> ${msg}`;
+            
+            chatContainer.appendChild(msgDiv);
+            if(chatContainer.children.length > 6) chatContainer.removeChild(chatContainer.firstChild);
+        }, 1500);
+
+        // 4. Trap Logic (Triggers on click OR automatically after 4 seconds)
+        let trapTriggered = false;
+        function showTrap() {
+            if(trapTriggered) return;
+            trapTriggered = true;
+            clearInterval(chatInterval);
+            document.getElementById('trap-modal').style.display = 'flex';
         }
+        
+        // Auto trigger trap after 4 seconds to build suspense
+        setTimeout(showTrap, 4000);
     </script>
 </body>
 </html>
